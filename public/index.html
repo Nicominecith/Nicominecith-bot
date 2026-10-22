@@ -3,58 +3,140 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nicominecith Bot Dashboard</title>
+<meta name="theme-color" content="#1e1f22">
+<title>Nicominecith Bot · Dashboard</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
 <style>
-:root{--bg:#1e1f22;--card:#2b2d31;--acc:#5865f2;--tx:#f2f3f5;--mu:#b5bac1}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx)}
-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--card)}
-header b{font-size:18px}main{max-width:760px;margin:0 auto;padding:18px}
-.btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 16px;font-size:15px;text-decoration:none;cursor:pointer;display:inline-block}
-.btn.g{background:#4e5058}.btn.r{background:#da373c}
-.card{background:var(--card);border-radius:12px;padding:14px;margin:10px 0;display:flex;align-items:center;gap:12px}
-.card img,.ph{width:44px;height:44px;border-radius:50%;background:#4e5058;flex:none}
-.card span{flex:1;font-weight:600}
-input,textarea{width:100%;background:#1e1f22;color:var(--tx);border:1px solid #3f4147;border-radius:8px;padding:10px;font:inherit;margin:4px 0}
-.cmd{display:block}.hero{text-align:center;padding:50px 0}.hero p{color:var(--mu)}
+:root{--bg:#1e1f22;--bg2:#2b2d31;--bg3:#383a40;--acc:#5865f2;--acc2:#7983f5;--tx:#f2f3f5;--mu:#b5bac1;--ok:#23a55a;--err:#f23f43;--r:14px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:radial-gradient(1200px 500px at 50% -200px,#2b2f6b55,transparent),var(--bg);color:var(--tx);min-height:100vh;padding-bottom:90px}
+a{color:inherit}
+header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 18px;background:#1e1f22ee;backdrop-filter:blur(10px);border-bottom:1px solid #ffffff10}
+.logo{font-weight:800;font-size:18px;text-decoration:none;display:flex;align-items:center;gap:8px}
+.user{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--mu)}
+.user img{width:32px;height:32px;border-radius:50%}
+main{max-width:860px;margin:0 auto;padding:20px 16px}
+h1{font-size:34px;margin:0 0 10px}h2{margin:6px 0 4px}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:10px;padding:11px 18px;font:600 15px inherit;font-family:inherit;text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+.btn:hover{background:var(--acc2);transform:translateY(-1px)}.btn.g{background:var(--bg3)}.btn.g:hover{background:#4a4d55}.btn.r{background:var(--err)}.btn.s{padding:8px 12px;font-size:14px}
+.hero{text-align:center;padding:50px 0 30px}.hero p{color:var(--mu);font-size:17px;max-width:520px;margin:0 auto 24px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:30px}
+.chip{background:var(--bg2);border:1px solid #ffffff10;border-radius:99px;padding:8px 14px;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:14px}
+.gc{background:var(--bg2);border:1px solid #ffffff0d;border-radius:var(--r);padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;transition:.15s}
+.gc:hover{border-color:var(--acc);transform:translateY(-2px)}
+.gc img,.ph{width:64px;height:64px;border-radius:50%;background:var(--bg3);display:grid;place-items:center;font-size:24px;font-weight:700}
+.gc b{word-break:break-word}.badge{font-size:12px;color:var(--ok)}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;scrollbar-width:none;margin:12px 0 4px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;background:var(--bg2);color:var(--mu);border:0;border-radius:99px;padding:9px 16px;font:600 14px inherit;font-family:inherit;cursor:pointer}
+.tab.on{background:var(--acc);color:#fff}
+.panel{background:var(--bg2);border-radius:var(--r);padding:18px;border:1px solid #ffffff0d}
+.panel>p{color:var(--mu);margin:2px 0 14px;font-size:14px}
+.f{display:block;margin:12px 0}.f>span{display:block;font-size:13px;font-weight:600;color:var(--mu);margin-bottom:6px}
+input:not([type=checkbox]),textarea,select{width:100%;background:var(--bg);color:var(--tx);border:1px solid #3f4147;border-radius:10px;padding:11px 12px;font:inherit;outline:0}
+input:focus,textarea:focus,select:focus{border-color:var(--acc)}
+.sw{display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-weight:600;cursor:pointer}
+.sw input{display:none}.sw i{width:46px;height:26px;background:var(--bg3);border-radius:99px;position:relative;transition:.2s;flex:none}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw input:checked+i{background:var(--ok)}.sw input:checked+i::after{left:23px}
+.cmd{background:var(--bg);border-radius:12px;padding:12px;margin:10px 0}.cmd .row{display:flex;gap:8px;align-items:center}
+.cmd .pre{color:var(--mu);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:14px}td{padding:9px 6px;border-bottom:1px solid #ffffff0d;vertical-align:top}td:first-child{white-space:nowrap;font-weight:700;color:var(--acc2)}
+.bar{position:fixed;left:50%;bottom:18px;transform:translate(-50%,140%);background:var(--bg3);border:1px solid #ffffff18;border-radius:14px;padding:10px 12px 10px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 30px #0008;transition:.25s;z-index:6;width:max-content;max-width:94vw}
+.bar.show{transform:translate(-50%,0)}
+#toast{position:fixed;top:70px;left:50%;transform:translate(-50%,-30px);opacity:0;padding:10px 18px;border-radius:10px;font-weight:600;transition:.25s;z-index:9;pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}#toast.ok{background:var(--ok)}#toast.err{background:var(--err)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.skel{height:130px;border-radius:var(--r);background:linear-gradient(90deg,var(--bg2),var(--bg3),var(--bg2));background-size:200%;animation:s 1.2s infinite}
+@keyframes s{to{background-position:-200%}}
 </style>
 </head>
 <body>
-<header><b>🤖 Nicominecith Bot</b><div id="top"></div></header>
+<header><a class="logo" href="/">🤖 Nicominecith Bot</a><div class="user" id="top"></div></header>
 <main id="app"></main>
+<div class="bar" id="bar"><span>Ungespeicherte Änderungen</span><button class="btn g s" onclick="reload()">Verwerfen</button><button class="btn s" onclick="save()">Speichern</button></div>
+<div id="toast"></div>
 <script>
-const $=(s)=>document.querySelector(s),app=$('#app');
-let cid='',cmds=[],gid='';
-const esc=(s)=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=s=>document.querySelector(s),app=$('#app');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let CID='',S={},meta={channels:[],roles:[]},gid='',gname='',tab='commands',dirty=false;
+const PERMS='1099780189206';
+function toast(t,ok=true){const e=$('#toast');e.textContent=t;e.className='show '+(ok?'ok':'err');clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',2600)}
+function setDirty(v){dirty=v;$('#bar').classList.toggle('show',v)}
+window.onbeforeunload=()=>dirty?'':undefined;
+
+const SCH={
+ welcome:{t:'Willkommen',d:'Begrüße neue Mitglieder. Platzhalter: {user.mention} {user.name} {server.name} {server.member_count}',f:[['on','Aktiv','check'],['channel','Kanal','channel'],['message','Willkommensnachricht','area'],['leave','Abschiedsnachricht','area'],['dm','Private Nachricht an neue Mitglieder','area'],['autorole','Auto-Rolle für Mitglieder','role'],['botrole','Auto-Rolle für Bots','role']]},
+ logs:{t:'Logs',d:'Beitritte, Austritte sowie gelöschte und bearbeitete Nachrichten.',f:[['channel','Log-Kanal','channel']]},
+ automod:{t:'AutoMod',d:'Löscht Regelverstöße automatisch und verwarnt. Team-Mitglieder mit „Nachrichten verwalten" sind ausgenommen.',f:[['invite','Einladungslinks blocken','check'],['spam','Anti-Spam','check'],['caps','Caps-Schwelle in % (0 = aus)','num'],['mentions','Max. Erwähnungen pro Nachricht (0 = aus)','num'],['badwords','Verbotene Wörter (mit Komma trennen)','area'],['warnLimit','Strafe ab Verwarnung Nr.','num'],['action','Strafe','select',['timeout','kick','ban']]]},
+ leveling:{t:'Leveling',d:'XP für Textnachrichten. Belohnungen im Format Level:RollenID, z. B. 5:123456789, 10:987654321',f:[['on','Aktiv','check'],['cooldown','Cooldown (Sekunden)','num'],['min','XP minimal','num'],['max','XP maximal','num'],['rewards','Rollen-Belohnungen','area']]},
+ starboard:{t:'Starboard',d:'Beliebte Nachrichten landen im Starboard-Kanal.',f:[['on','Aktiv','check'],['channel','Starboard-Kanal','channel'],['emoji','Emoji','text'],['threshold','Benötigte Sterne','num'],['selfstar','Eigene Sterne zählen','check']]},
+ tickets:{t:'Tickets',d:'Das Panel erstellst du im Discord mit /ticketpanel.',f:[['category','Kategorie für Tickets','category'],['supportRole','Support-Rolle','role'],['logChannel','Transkript-Kanal','channel']]}
+};
+const TABS=[['commands','Befehle'],...Object.entries(SCH).map(([k,v])=>[k,v.t]),['help','Übersicht']];
+const HELP=[['/ping /info','Status und Infos'],['/ban /kick /timeout','Moderation'],['/warn /warns','Verwarnen und anzeigen'],['/purge','Nachrichten löschen'],['/rank','Level anzeigen'],['/rolepanel','Rollen per Button (Toggle oder Single)'],['/ticketpanel','Ticket-Panel posten'],['/giveaway start|end','Gewinnspiele'],['/poll','Umfrage mit 2–5 Optionen']];
+
+function set(sec,k,v){S[sec][k]=typeof S[sec][k]==='number'?Number(v):v;setDirty(true)}
+function field(sec,[k,l,t,o]){
+ const v=S[sec][k],ch=`onchange="set('${sec}','${k}',this.value)"`,inp=`oninput="set('${sec}','${k}',this.value)"`;
+ if(t==='check')return `<label class="sw"><span>${l}</span><input type="checkbox" ${v?'checked':''} onchange="set('${sec}','${k}',this.checked)"><i></i></label>`;
+ let c;
+ if(t==='area')c=`<textarea rows="3" ${inp}>${esc(v)}</textarea>`;
+ else if(t==='num')c=`<input type="number" inputmode="numeric" value="${esc(v)}" ${inp}>`;
+ else if(t==='select')c=`<select ${ch}>${o.map(x=>`<option ${x==v?'selected':''}>${x}</option>`).join('')}</select>`;
+ else if(['channel','role','category'].includes(t)){
+  const list=t==='role'?meta.roles.map(r=>[r.id,'@'+r.name]):meta.channels.filter(x=>t==='category'?x.type===4:x.type===0).map(x=>[x.id,(t==='category'?'':'#')+x.name]);
+  c=list.length?`<select ${ch}><option value="">– keiner –</option>${list.map(([id,n])=>`<option value="${id}" ${id===v?'selected':''}>${esc(n)}</option>`).join('')}</select>`:`<input placeholder="ID" value="${esc(v)}" ${inp}>`;
+ } else c=`<input value="${esc(v)}" ${inp}>`;
+ return `<label class="f"><span>${l}</span>${c}</label>`;
+}
+
 async function init(){
-  const r=await fetch('/api/me');const d=await r.json();cid=d.clientId;
-  if(!r.ok){$('#top').innerHTML='';app.innerHTML=`<div class="hero"><h1>Nicominecith Bot</h1><p>Kostenloses Dashboard für deinen Discord-Server.<br>Eigene Befehle, einfach per Klick.</p><a class="btn" href="/api/login">Mit Discord anmelden</a></div>`;return}
-  $('#top').innerHTML=`${esc(d.user.name)} · <a href="/api/logout" style="color:var(--mu)">Logout</a>`;
-  showGuilds();
+ app.innerHTML='<div class="skel"></div>';
+ const r=await fetch('/api/me'),d=await r.json();CID=d.clientId;
+ if(!r.ok){
+  $('#top').innerHTML='';
+  app.innerHTML=`<div class="hero"><h1>Dein Discord-Server.<br>Dein Bot. Kostenlos.</h1><p>Moderation, AutoMod, Leveling, Tickets, Rollen, Giveaways und mehr, alles bequem im Browser einstellen.</p><a class="btn" href="/api/login">Mit Discord anmelden</a><div class="chips">${['🛡️ Moderation','🤖 AutoMod','📈 Leveling','🎫 Tickets','🎭 Reaction Roles','🎉 Giveaways','📊 Umfragen','⭐ Starboard','👋 Willkommen','📜 Logs'].map(x=>`<span class="chip">${x}</span>`).join('')}</div></div>`;
+  return;
+ }
+ const u=d.user;
+ $('#top').innerHTML=`${u.avatar?`<img src="https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=64" alt="">`:''}<span>${esc(u.name)}</span><a class="btn g s" href="/api/logout">Logout</a>`;
+ showGuilds();
 }
 async function showGuilds(){
-  app.innerHTML='<h2>Deine Server</h2><p style="color:var(--mu)">Lade…</p>';
-  const gs=await (await fetch('/api/guilds')).json();
-  app.innerHTML='<h2>Deine Server</h2>'+(gs.length?'':'<p>Keine Server mit „Server verwalten“-Recht gefunden.</p>')+gs.map(g=>`<div class="card">${g.icon?`<img src="https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64">`:'<div class="ph"></div>'}<span>${esc(g.name)}</span>${g.botIn?`<button class="btn" onclick="openGuild('${g.id}')">Verwalten</button>`:`<a class="btn g" target="_blank" href="https://discord.com/oauth2/authorize?client_id=${cid}&scope=bot+applications.commands&permissions=2048&guild_id=${g.id}&disable_guild_select=true">Bot einladen</a>`}</div>`).join('');
+ if(dirty&&!confirm('Ungespeicherte Änderungen verwerfen?'))return;
+ setDirty(false);
+ app.innerHTML='<h2>Deine Server</h2><div class="grid"><div class="skel"></div><div class="skel"></div><div class="skel"></div></div>';
+ const gs=await (await fetch('/api/guilds')).json();
+ gs.sort((a,b)=>b.botIn-a.botIn);
+ app.innerHTML=`<h2>Deine Server</h2><p style="color:var(--mu)">Server, auf denen du „Server verwalten" darfst.</p>`+(gs.length?'':'<p>Keine passenden Server gefunden.</p>')+`<div class="grid">${gs.map(g=>`<div class="gc">${g.icon?`<img src="https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=128" alt="">`:`<div class="ph">${esc(g.name[0])}</div>`}<b>${esc(g.name)}</b>${g.botIn?`<span class="badge">● Bot ist dabei</span><button class="btn" onclick="openGuild('${g.id}','${esc(g.name).replace(/'/g,'')}')">Verwalten</button>`:`<a class="btn g" target="_blank" href="https://discord.com/oauth2/authorize?client_id=${CID}&scope=bot+applications.commands&permissions=${PERMS}&guild_id=${g.id}&disable_guild_select=true">Bot einladen</a>`}</div>`).join('')}</div>`;
 }
-const SCH={
- welcome:[['on','Aktiv','check'],['channel','Kanal-ID'],['message','Willkommensnachricht','area'],['leave','Abschiedsnachricht','area'],['dm','DM an neue Mitglieder','area'],['autorole','Auto-Rolle (ID)'],['botrole','Bot-Rolle (ID)']],
- logs:[['channel','Log-Kanal-ID']],
- automod:[['invite','Invite-Links blocken','check'],['spam','Anti-Spam','check'],['caps','Caps-Schwelle % (0=aus)','num'],['mentions','Max. Erwähnungen (0=aus)','num'],['badwords','Verbotene Wörter (Komma)','area'],['warnLimit','Aktion nach X Verwarnungen','num'],['action','Aktion: timeout / kick / ban']],
- starboard:[['on','Aktiv','check'],['channel','Starboard-Kanal-ID'],['emoji','Emoji (z. B. ⭐)'],['threshold','Benötigte Sterne','num'],['selfstar','Eigene Sterne zählen','check']],
- tickets:[['category','Ticket-Kategorie-ID'],['supportRole','Support-Rollen-ID'],['logChannel','Transkript-Kanal-ID']],
- leveling:[['on','Aktiv','check'],['cooldown','Cooldown Sek.','num'],['min','XP min','num'],['max','XP max','num'],['rewards','Rollen-Belohnungen (Level:RollenID, Komma)','area']]};
-const TABS={commands:'Befehle',welcome:'Willkommen',logs:'Logs',automod:'AutoMod',starboard:'Starboard',tickets:'Tickets',leveling:'Leveling'};
-let S={},tab='commands';
-async function openGuild(id){gid=id;S=await (await fetch('/api/settings?guild='+id)).json();cmds=S.commands;render()}
+async function openGuild(id,name){
+ gid=id;gname=name;tab='commands';app.innerHTML='<div class="skel"></div>';
+ const [s,m]=await Promise.all([fetch('/api/settings?guild='+id).then(r=>r.json()),fetch('/api/meta?guild='+id).then(r=>r.ok?r.json():meta)]);
+ S=s;meta=m.channels?m:{channels:[],roles:[]};setDirty(false);render();
+}
+function reload(){setDirty(false);openGuild(gid,gname)}
+function go(t){tab=t;render()}
 function render(){
- let h=`<button class="btn g" onclick="showGuilds()">← Zurück</button> <a class="btn g" target="_blank" href="/leaderboard.html?guild=${gid}">🏆 Leaderboard</a><p>`+Object.entries(TABS).map(([k,v])=>`<button class="btn ${k==tab?'':'g'}" onclick="tab='${k}';render()">${v}</button>`).join(' ')+'</p>';
- if(tab=='commands'){h+=cmds.map((c,i)=>`<div class="card cmd"><input value="${esc(c.name)}" placeholder="name" oninput="cmds[${i}].name=this.value"><textarea rows="3" placeholder="Antwort" oninput="cmds[${i}].response=this.value">${esc(c.response)}</textarea><button class="btn r" onclick="cmds.splice(${i},1);render()">Löschen</button></div>`).join('')+`<button class="btn g" onclick="cmds.push({name:'',response:''});render()">+ Befehl</button> `}
- else{h+=SCH[tab].map(([k,l,t])=>{const v=S[tab][k];return t=='check'?`<label class="cmd"><input type="checkbox" style="width:auto" ${v?'checked':''} onchange="S['${tab}']['${k}']=this.checked"> ${l}</label>`:t=='area'?`<label>${l}<textarea rows="3" oninput="S['${tab}']['${k}']=this.value">${esc(v)}</textarea></label>`:`<label>${l}<input ${t=='num'?'type="number"':''} value="${esc(v)}" oninput="S['${tab}']['${k}']=this.value"></label>`}).join('')+(tab=='tickets'?'<p style="color:var(--mu)">Panels im Discord erstellen: /rolepanel und /ticketpanel</p>':'')+(tab=='welcome'?'<p style="color:var(--mu)">Platzhalter: {user.mention} {user.name} {server.name} {server.member_count}</p>':'')}
- app.innerHTML=h+'<button class="btn" onclick="save()">Speichern</button><p id="msg"></p><p style="color:var(--mu)">Hinweis: Willkommen, Logs, AutoMod und Leveling brauchen den laufenden Bot-Prozess (Ordner bot/).</p>';
+ let h=`<div class="top"><div><button class="btn g s" onclick="showGuilds()">← Server</button></div><div><a class="btn g s" target="_blank" href="/leaderboard.html?guild=${gid}">🏆 Leaderboard</a></div></div><h2 style="margin-top:14px">${esc(gname)}</h2><div class="tabs">${TABS.map(([k,v])=>`<button class="tab ${k==tab?'on':''}" onclick="go('${k}')">${v}</button>`).join('')}</div><div class="panel">`;
+ if(tab==='commands'){
+  h+=`<h3 style="margin:0">Eigene Befehle</h3><p>Erscheinen als Slash-Befehle (/name). Maximal 20.</p>`+S.commands.map((c,i)=>`<div class="cmd"><div class="row"><span class="pre">/</span><input value="${esc(c.name)}" placeholder="name" maxlength="32" oninput="S.commands[${i}].name=this.value.toLowerCase();setDirty(true)"><button class="btn r s" onclick="S.commands.splice(${i},1);setDirty(true);render()">✕</button></div><textarea rows="3" style="margin-top:8px" placeholder="Antwort des Bots" oninput="S.commands[${i}].response=this.value;setDirty(true)">${esc(c.response)}</textarea></div>`).join('')+(S.commands.length<20?`<button class="btn g" onclick="S.commands.push({name:'',response:''});setDirty(true);render()">+ Befehl hinzufügen</button>`:'');
+ }else if(tab==='help'){
+  h+=`<h3 style="margin:0">Alle Befehle</h3><p>Die Moderations- und Panel-Befehle laufen über den Bot-Prozess.</p><table>${HELP.map(([a,b])=>`<tr><td>${a}</td><td>${b}</td></tr>`).join('')}</table>`;
+ }else{
+  const s=SCH[tab];h+=`<h3 style="margin:0">${s.t}</h3><p>${esc(s.d)}</p>`+s.f.map(f=>field(tab,f)).join('');
+ }
+ app.innerHTML=h+'</div>';
 }
 async function save(){
- S.commands=cmds;const r=await fetch('/api/settings?guild='+gid,{method:'POST',body:JSON.stringify(S)});const d=await r.json();
- $('#msg').textContent=d.ok?'✅ Gespeichert':'⚠️ Gespeichert, Discord-Registrierung fehlgeschlagen';
+ try{
+  const r=await fetch('/api/settings?guild='+gid,{method:'POST',body:JSON.stringify(S)});const d=await r.json();
+  if(!r.ok)throw 0;
+  if(d.commands)S.commands=d.commands;setDirty(false);render();
+  toast(d.ok?'✅ Gespeichert':'Gespeichert, aber Befehle konnten bei Discord nicht registriert werden',d.ok);
+ }catch{toast('Speichern fehlgeschlagen',false)}
 }
 init();
 </script>
