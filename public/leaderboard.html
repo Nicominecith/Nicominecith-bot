@@ -1,0 +1,7 @@
+<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Leaderboard</title>
+<style>body{margin:0;font-family:system-ui;background:#1e1f22;color:#f2f3f5}main{max-width:600px;margin:auto;padding:18px}.r{display:flex;gap:12px;background:#2b2d31;border-radius:10px;padding:12px;margin:8px 0}.r b{width:34px}.r span{flex:1}</style></head>
+<body><main><h2>🏆 Leaderboard</h2><div id="l">Lade…</div></main>
+<script>
+fetch('/api/leaderboard?guild='+new URLSearchParams(location.search).get('guild')).then(r=>r.json()).then(d=>{
+document.getElementById('l').innerHTML=d.map((x,i)=>`<div class="r"><b>#${i+1}</b><span>${x.name.replace(/[<>&]/g,'')}</span><span>Level ${x.level}</span><span>${x.xp} XP</span></div>`).join('')||'Noch keine Daten.'});
+</script></body></html>

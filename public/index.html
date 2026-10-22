@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nicominecith Bot Dashboard</title>
+<style>
+:root{--bg:#1e1f22;--card:#2b2d31;--acc:#5865f2;--tx:#f2f3f5;--mu:#b5bac1}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--card)}
+header b{font-size:18px}main{max-width:760px;margin:0 auto;padding:18px}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 16px;font-size:15px;text-decoration:none;cursor:pointer;display:inline-block}
+.btn.g{background:#4e5058}.btn.r{background:#da373c}
+.card{background:var(--card);border-radius:12px;padding:14px;margin:10px 0;display:flex;align-items:center;gap:12px}
+.card img,.ph{width:44px;height:44px;border-radius:50%;background:#4e5058;flex:none}
+.card span{flex:1;font-weight:600}
+input,textarea{width:100%;background:#1e1f22;color:var(--tx);border:1px solid #3f4147;border-radius:8px;padding:10px;font:inherit;margin:4px 0}
+.cmd{display:block}.hero{text-align:center;padding:50px 0}.hero p{color:var(--mu)}
+</style>
+</head>
+<body>
+<header><b>🤖 Nicominecith Bot</b><div id="top"></div></header>
+<main id="app"></main>
+<script>
+const $=(s)=>document.querySelector(s),app=$('#app');
+let cid='',cmds=[],gid='';
+const esc=(s)=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function init(){
+  const r=await fetch('/api/me');const d=await r.json();cid=d.clientId;
+  if(!r.ok){$('#top').innerHTML='';app.innerHTML=`<div class="hero"><h1>Nicominecith Bot</h1><p>Kostenloses Dashboard für deinen Discord-Server.<br>Eigene Befehle, einfach per Klick.</p><a class="btn" href="/api/login">Mit Discord anmelden</a></div>`;return}
+  $('#top').innerHTML=`${esc(d.user.name)} · <a href="/api/logout" style="color:var(--mu)">Logout</a>`;
+  showGuilds();
+}
+async function showGuilds(){
+  app.innerHTML='<h2>Deine Server</h2><p style="color:var(--mu)">Lade…</p>';
+  const gs=await (await fetch('/api/guilds')).json();
+  app.innerHTML='<h2>Deine Server</h2>'+(gs.length?'':'<p>Keine Server mit „Server verwalten“-Recht gefunden.</p>')+gs.map(g=>`<div class="card">${g.icon?`<img src="https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=64">`:'<div class="ph"></div>'}<span>${esc(g.name)}</span>${g.botIn?`<button class="btn" onclick="openGuild('${g.id}')">Verwalten</button>`:`<a class="btn g" target="_blank" href="https://discord.com/oauth2/authorize?client_id=${cid}&scope=bot+applications.commands&permissions=2048&guild_id=${g.id}&disable_guild_select=true">Bot einladen</a>`}</div>`).join('');
+}
+const SCH={
+ welcome:[['on','Aktiv','check'],['channel','Kanal-ID'],['message','Willkommensnachricht','area'],['leave','Abschiedsnachricht','area'],['dm','DM an neue Mitglieder','area'],['autorole','Auto-Rolle (ID)'],['botrole','Bot-Rolle (ID)']],
+ logs:[['channel','Log-Kanal-ID']],
+ automod:[['invite','Invite-Links blocken','check'],['spam','Anti-Spam','check'],['caps','Caps-Schwelle % (0=aus)','num'],['mentions','Max. Erwähnungen (0=aus)','num'],['badwords','Verbotene Wörter (Komma)','area'],['warnLimit','Aktion nach X Verwarnungen','num'],['action','Aktion: timeout / kick / ban']],
+ starboard:[['on','Aktiv','check'],['channel','Starboard-Kanal-ID'],['emoji','Emoji (z. B. ⭐)'],['threshold','Benötigte Sterne','num'],['selfstar','Eigene Sterne zählen','check']],
+ tickets:[['category','Ticket-Kategorie-ID'],['supportRole','Support-Rollen-ID'],['logChannel','Transkript-Kanal-ID']],
+ leveling:[['on','Aktiv','check'],['cooldown','Cooldown Sek.','num'],['min','XP min','num'],['max','XP max','num'],['rewards','Rollen-Belohnungen (Level:RollenID, Komma)','area']]};
+const TABS={commands:'Befehle',welcome:'Willkommen',logs:'Logs',automod:'AutoMod',starboard:'Starboard',tickets:'Tickets',leveling:'Leveling'};
+let S={},tab='commands';
+async function openGuild(id){gid=id;S=await (await fetch('/api/settings?guild='+id)).json();cmds=S.commands;render()}
+function render(){
+ let h=`<button class="btn g" onclick="showGuilds()">← Zurück</button> <a class="btn g" target="_blank" href="/leaderboard.html?guild=${gid}">🏆 Leaderboard</a><p>`+Object.entries(TABS).map(([k,v])=>`<button class="btn ${k==tab?'':'g'}" onclick="tab='${k}';render()">${v}</button>`).join(' ')+'</p>';
+ if(tab=='commands'){h+=cmds.map((c,i)=>`<div class="card cmd"><input value="${esc(c.name)}" placeholder="name" oninput="cmds[${i}].name=this.value"><textarea rows="3" placeholder="Antwort" oninput="cmds[${i}].response=this.value">${esc(c.response)}</textarea><button class="btn r" onclick="cmds.splice(${i},1);render()">Löschen</button></div>`).join('')+`<button class="btn g" onclick="cmds.push({name:'',response:''});render()">+ Befehl</button> `}
+ else{h+=SCH[tab].map(([k,l,t])=>{const v=S[tab][k];return t=='check'?`<label class="cmd"><input type="checkbox" style="width:auto" ${v?'checked':''} onchange="S['${tab}']['${k}']=this.checked"> ${l}</label>`:t=='area'?`<label>${l}<textarea rows="3" oninput="S['${tab}']['${k}']=this.value">${esc(v)}</textarea></label>`:`<label>${l}<input ${t=='num'?'type="number"':''} value="${esc(v)}" oninput="S['${tab}']['${k}']=this.value"></label>`}).join('')+(tab=='tickets'?'<p style="color:var(--mu)">Panels im Discord erstellen: /rolepanel und /ticketpanel</p>':'')+(tab=='welcome'?'<p style="color:var(--mu)">Platzhalter: {user.mention} {user.name} {server.name} {server.member_count}</p>':'')}
+ app.innerHTML=h+'<button class="btn" onclick="save()">Speichern</button><p id="msg"></p><p style="color:var(--mu)">Hinweis: Willkommen, Logs, AutoMod und Leveling brauchen den laufenden Bot-Prozess (Ordner bot/).</p>';
+}
+async function save(){
+ S.commands=cmds;const r=await fetch('/api/settings?guild='+gid,{method:'POST',body:JSON.stringify(S)});const d=await r.json();
+ $('#msg').textContent=d.ok?'✅ Gespeichert':'⚠️ Gespeichert, Discord-Registrierung fehlgeschlagen';
+}
+init();
+</script>
+</body>
+</html>
